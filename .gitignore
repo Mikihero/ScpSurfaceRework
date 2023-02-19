@@ -1,0 +1,6 @@
+bin/
+obj/
+packages.config
+.idea/
+packages/
+ScpSurfaceRework.sln.DotSettings.user
