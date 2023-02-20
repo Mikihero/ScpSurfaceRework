@@ -1,60 +1,85 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Enums;
-using Exiled.API.Features;
 using MEC;
+using Exiled.API.Features;
+using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp049;
 using PlayerRoles;
-using Player = Exiled.API.Features.Player;
+using PlayerStatsSystem;
 
 namespace ScpSurfaceRework
 {
     public class EventHandlers
     {
+        private Config _cfg = Plugin.Instance.Config;
         public void OnDetonated()
         {
             var scps = Player.Get(Side.Scp);
             foreach (Player pl in scps)
             {
-                if (Plugin.Instance.Config.Boost049 && pl.Role.Type == RoleTypeId.Scp049)
-                {
-                    pl.ChangeEffectIntensity(EffectType.MovementBoost, Plugin.Instance.Config.Scp049SpeedBoost);
-                    Log.Debug($"Applied effect to {pl.Nickname}({pl.RawUserId}) playing as {pl.Role.Name}.");
-                }
                 if (pl.Role.Type == RoleTypeId.Scp106)
                 {
-                    if(Plugin.Instance.Config.Boost106)
+                    Timing.RunCoroutine(ChangeScpHumeShield(pl));
+                    if (_cfg.Scp106SpeedBoost != 0)
                     {
-                        pl.ChangeEffectIntensity(EffectType.MovementBoost, Plugin.Instance.Config.Scp106SpeedBoost);
-                        Log.Debug($"Applied effect to {pl.Nickname}({pl.RawUserId}) playing as {pl.Role.Name}.");
-                    }
-
-                    if (Plugin.Instance.Config.Change106Hs)
-                    {
-                        Log.Info("asd");
-                        pl.MaxHumeShield = /*Plugin.Instance.Config.Scp106Hs*/0;
+                        pl.ChangeEffectIntensity(EffectType.MovementBoost, _cfg.Scp106SpeedBoost);
                     }
                 }
-                if (/*Plugin.Instance.Config.Boost049 && */pl.Role.Type == RoleTypeId.Scp939)
+
+                if (pl.Role.Type == RoleTypeId.Scp939) //TODO: Add this for every SCP
                 {
-                    //pl.ChangeEffectIntensity(EffectType.MovementBoost, Plugin.Instance.Config.Scp049SpeedBoost);
-                    Log.Debug($"Applied effect to {pl.Nickname}({pl.RawUserId}) playing as {pl.Role.Name}.");
-                    pl.MaxHumeShield = 0;
-                    Log.Info("asd");
+                    
                 }
             }
         }
 
-        public IEnumerator<float> Change106Health(Player pl)
+        public void OnFinishingRecall(FinishingRecallEventArgs ev)
+        {
+            if (Warhead.IsDetonated)
+            {
+                ev.Player.HumeShield += 50; //TODO: Add a config for the amount
+            }
+        }
+        
+        public void OnHurt(HurtingEventArgs ev)
+        {
+            if (ev.DamageHandler.Type == DamageType.Scp106 && Warhead.IsDetonated)
+            {
+                ev.Player.Kill(DamageType.Scp106);
+            }
+        }
+        
+        private IEnumerator<float> ChangeScpHumeShield(Player pl)
         {
             while (true)
             {
-                if (Plugin.Instance.Config.Change106Hs)
+                if (!pl.IsAlive)
                 {
-                    if (pl.HumeShield > Plugin.Instance.Config.Scp106Hs)
-                    {
-                        pl.HumeShield = Plugin.Instance.Config.Scp106Hs;
-                    }
+                    yield break;
                 }
 
+                switch (pl.Role.Type)
+                {
+                    case RoleTypeId.Scp106:
+                        if (_cfg.Scp106Hs != -1)
+                        {
+                            if (pl.HumeShield > _cfg.Scp106Hs)
+                            {
+                                pl.HumeShield = _cfg.Scp106Hs;
+                            }
+                        }
+                        break;
+                    case RoleTypeId.Scp049: //TODO: Continue this whatever this is
+                        /*if (_cfg.Chan)
+                        {
+                            if (pl.HumeShield > _cfg.Scp106Hs)
+                            {
+                                pl.HumeShield = _cfg.Scp106Hs;
+                            }
+                        }*/
+                        break;
+                }
+                
                 yield return Timing.WaitForSeconds(1f);
             }
         }

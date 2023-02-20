@@ -1,7 +1,9 @@
 ﻿using System;
 using Exiled.API.Features;
+using Exiled.Events.Handlers;
 using warhead = Exiled.Events.Handlers.Warhead;
 using player = Exiled.Events.Handlers.Player;
+using scp049 = Exiled.Events.Handlers.Scp049;
 
 namespace ScpSurfaceRework
 {
@@ -32,11 +34,14 @@ namespace ScpSurfaceRework
         {
             _eventHandlers = new EventHandlers();
             warhead.Detonated += _eventHandlers.OnDetonated;
+            player.Hurting += _eventHandlers.OnHurt;
+            scp049.FinishingRecall += _eventHandlers.OnFinishingRecall;
         }
         
         private void UnRegisterEvents()
         {
             warhead.Detonated -= _eventHandlers.OnDetonated;
+            player.Hurting -= _eventHandlers.OnHurt;
             _eventHandlers = null;
         }
     }
