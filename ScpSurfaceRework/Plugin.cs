@@ -35,6 +35,7 @@ namespace ScpSurfaceRework
             _eventHandlers = new EventHandlers();
             warhead.Detonated += _eventHandlers.OnDetonated;
             player.Hurting += _eventHandlers.OnHurt;
+            player.ChangingRole += _eventHandlers.OnChangingRole;
             scp049.FinishingRecall += _eventHandlers.OnFinishingRecall;
         }
         
@@ -42,6 +43,7 @@ namespace ScpSurfaceRework
         {
             warhead.Detonated -= _eventHandlers.OnDetonated;
             player.Hurting -= _eventHandlers.OnHurt;
+            player.ChangingRole -= _eventHandlers.OnChangingRole;
             _eventHandlers = null;
         }
     }
