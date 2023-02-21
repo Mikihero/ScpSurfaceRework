@@ -4,6 +4,7 @@ using MEC;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp049;
 using PlayerRoles;
+using PlayerStatsSystem;
 using Player = Exiled.API.Features.Player;
 using Warhead = Exiled.API.Features.Warhead;
 // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -104,7 +105,7 @@ namespace ScpSurfaceRework
         {
             if (ev.DamageHandler.Type == DamageType.Scp106 && Warhead.IsDetonated && _cfg.Scp106OneShot)
             {
-                ev.Player.Kill(DamageType.Scp106);
+                ev.Player.Kill(new ScpDamageHandler(ev.Attacker.ReferenceHub, DeathTranslations.PocketDecay));
             }
         }
         
