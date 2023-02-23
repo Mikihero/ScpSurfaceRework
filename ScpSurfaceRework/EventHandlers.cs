@@ -104,7 +104,7 @@ namespace ScpSurfaceRework
 
         public void OnEnteringPocketDimension(EnteringPocketDimensionEventArgs ev)
         {
-            if (Warhead.IsDetonated)
+            if (Warhead.IsDetonated && _cfg.Scp106OneShot)
             {
                 ev.Player.Kill(new ScpDamageHandler(ev.Scp106.ReferenceHub, DeathTranslations.PocketDecay));
             }
