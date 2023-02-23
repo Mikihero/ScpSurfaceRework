@@ -4,6 +4,7 @@ using MEC;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp049;
 using PlayerRoles;
+using PlayerRoles.PlayableScps.Scp106;
 using PlayerStatsSystem;
 using Player = Exiled.API.Features.Player;
 using Warhead = Exiled.API.Features.Warhead;
@@ -100,15 +101,15 @@ namespace ScpSurfaceRework
                 }
             }
         }
-        
-        public void OnHurt(HurtingEventArgs ev)
+
+        public void OnEnteringPocketDimension(EnteringPocketDimensionEventArgs ev)
         {
-            if (ev.DamageHandler.Type == DamageType.Scp106 && Warhead.IsDetonated && _cfg.Scp106OneShot)
+            if (Warhead.IsDetonated)
             {
-                ev.Player.Kill(new ScpDamageHandler(ev.Attacker.ReferenceHub, DeathTranslations.PocketDecay));
+                ev.Player.Kill(new ScpDamageHandler(ev.Scp106.ReferenceHub, DeathTranslations.PocketDecay));
             }
         }
-        
+
         private IEnumerator<float> ChangeScpHumeShield(Player pl)
         {
             while (true)

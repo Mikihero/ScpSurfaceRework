@@ -1,6 +1,5 @@
 ﻿using System;
 using Exiled.API.Features;
-using Exiled.Events.Handlers;
 using warhead = Exiled.Events.Handlers.Warhead;
 using player = Exiled.Events.Handlers.Player;
 using scp049 = Exiled.Events.Handlers.Scp049;
@@ -34,16 +33,17 @@ namespace ScpSurfaceRework
         {
             _eventHandlers = new EventHandlers();
             warhead.Detonated += _eventHandlers.OnDetonated;
-            player.Hurting += _eventHandlers.OnHurt;
             player.ChangingRole += _eventHandlers.OnChangingRole;
             scp049.FinishingRecall += _eventHandlers.OnFinishingRecall;
+            player.EnteringPocketDimension += _eventHandlers.OnEnteringPocketDimension;
         }
         
         private void UnRegisterEvents()
         {
             warhead.Detonated -= _eventHandlers.OnDetonated;
-            player.Hurting -= _eventHandlers.OnHurt;
             player.ChangingRole -= _eventHandlers.OnChangingRole;
+            scp049.FinishingRecall -= _eventHandlers.OnFinishingRecall;
+            player.EnteringPocketDimension -= _eventHandlers.OnEnteringPocketDimension;
             _eventHandlers = null;
         }
     }
