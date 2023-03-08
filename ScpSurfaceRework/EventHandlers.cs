@@ -140,7 +140,7 @@ namespace ScpSurfaceRework
                         }
                         break;
                     case RoleTypeId.Scp049:
-                        if (_cfg.Scp049Hs != 1)
+                        if (_cfg.Scp049Hs != -1)
                         {
                             if (pl.HumeShield > _cfg.Scp049Hs)
                             {
@@ -149,7 +149,7 @@ namespace ScpSurfaceRework
                         }
                         break;
                     case RoleTypeId.Scp096:
-                        if (_cfg.Scp096Hs != 1)
+                        if (_cfg.Scp096Hs != -1)
                         {
                             if (pl.HumeShield > _cfg.Scp096Hs)
                             {
@@ -158,7 +158,7 @@ namespace ScpSurfaceRework
                         }
                         break;
                     case RoleTypeId.Scp0492:
-                        if (_cfg.Scp0492Hs != 1)
+                        if (_cfg.Scp0492Hs != -1)
                         {
                             if (pl.HumeShield > _cfg.Scp0492Hs)
                             {
@@ -167,7 +167,7 @@ namespace ScpSurfaceRework
                         }
                         break;
                     case RoleTypeId.Scp939:
-                        if (_cfg.Scp939Hs != 1)
+                        if (_cfg.Scp939Hs != -1)
                         {
                             if (pl.HumeShield > _cfg.Scp939Hs)
                             {
